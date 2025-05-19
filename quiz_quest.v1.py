@@ -36,6 +36,7 @@ def string_checker(question, valid_ans=("yes", "no")):
             if item == user_response:
                 return item
             # check if the user response is the same as the first letter of an item in the list
+            # So that they need only type the first letter to make a selection
             elif user_response == item[0]:
                 return item
 
@@ -43,27 +44,54 @@ def string_checker(question, valid_ans=("yes", "no")):
         print(error)
         print()
 
+def the_instructions():
+    """ Prints the instructions for the user """
+    print("""
+*** Instructions ****
+
+To begin, choose the number of questions you would like to answer
+
+Then you will be asked to select a question type
+This is out of Triangle, Point, or Quadrilateral 
+And try to answer. If you answer incorrectly, you will be told the correct answer before you move on
+Remember -
+A triangles internal angles always add up to 180 degrees
+Angles around a point will also always add up to 180 degrees
+And a Quadrilaterals internal angles will always add to 360 degrees.
+You can enter the exit code of xxx at any time when selecting a question type if you would like to end the quiz
+And to only type your answer without a unit!
+
+Good luck, and if you get stuck, don't be afraid to look at the question from a different angle 😉
+    """)
+
 # Initialise Variables
-question_types = ["triangle", "line", "square", "xxx"]
+question_types = ["triangle", "point", "quadrilateral", "xxx"]
 questions_answered = 0
 correct_answers = 0
 incorrect_answers = 0
 question_number = 1
 quiz_history = []
 user_answer = ""
+
+# Welcome statement, check if they would like to see the instructions
+print("Welcome to Quiz Quest - 📐 Angles Edition! 📐")
+# Asks the user for their name in order to personalise the program
+user_name = input("Please enter your name to proceed: ")
+wants_instructions = string_checker(f"{user_name}, would you like to see the instructions before you begin? ")
+if wants_instructions == "yes":
+    the_instructions()
 # Check how many questions the user would like
-print("Welcome to Quiz Quest - Angles Edition!")
-number_of_questions = int_check("How many rounds would you like? Press <enter> to start infinite mode ")
+number_of_questions = int_check(f"How many questions would you like, {user_name}? Press <enter> to start infinite mode ")
 if number_of_questions == "infinite":
-    print("infinite mode")
+    print(" ∞ infinite mode initiated! ∞ ")
     mode = "infinite"
-    number_of_questions = 2
+    number_of_questions = 1
 else:
     mode = "regular"
 while questions_answered < number_of_questions:
     print(f"Question {question_number}")
-    # Ask for type of question - Triangle, straight line, square
-    type_of_question = string_checker("Choose a question type! (Triangle (T), Straight Line (L), or Square (S)): ", question_types)
+    # Ask for type of question - Triangle, point, quadrilateral
+    type_of_question = string_checker("Choose a question type! (Triangle (T), Point (P), or Quadrilateral (Q)): ", question_types)
     if mode == "infinite":
         number_of_questions += 1
     # Stop the question process if the user enters the exit code
@@ -76,9 +104,10 @@ while questions_answered < number_of_questions:
         while True:
             try:
                 user_answer = int(input(f'If a triangles internal angles add up to 180 degrees, and the first to degrees are {angle_one} and {angle_two}, what is the value of the third angle? '))
+                # Triangle - 180 - random int - random int = answer
                 answer_triangle = 180 - angle_one - angle_two
                 if user_answer == answer_triangle:
-                    print("Congratulations! You answered correctly")
+                    print(f"Congratulations, {user_name}! You answered correctly")
                     correct_answers += 1
                     answer = "correct 👍. Great Job!"
                     break
@@ -98,23 +127,23 @@ while questions_answered < number_of_questions:
         # Defines the variable to only be used if the user was incorrect - left blank if they were correct
         actual_answer = f""
         if answer == "incorrect 😔. Keep Working On It!":
-            correct_answer_needed = "true"
             actual_answer = f"The Correct answer was: {answer_triangle}"
         history_item = f"Question {question_number} - {question}, {answer_input}. {answer_correct_or_incorrect}. {actual_answer}"
         quiz_history.append(history_item)
-    if type_of_question == "line":
+    if type_of_question == "point":
         angle_one = random.randint(1, 175)
         while True:
             try:
-                user_answer = int(input(f'If the angles around straight lines add up to 180 degrees, and you know one angle is {angle_one}, what is the value of the adjacent angle? '))
-                answer_line = 180 - angle_one
-                if user_answer == answer_line:
-                    print("Congratulations! You answered correctly")
+                user_answer = int(input(f'If the angles around a point add up to 180 degrees, and you know one angle is {angle_one}, what is the value of the adjacent angle? '))
+                # Point 180 - random int = answer
+                answer_point = 180 - angle_one
+                if user_answer == answer_point:
+                    print(f"Congratulations, {user_name}! You answered correctly")
                     correct_answers += 1
                     answer = "correct 👍. Great Job!"
                     break
                 else:
-                    print(f"Unfortunately, that is not the right answer. The right answer was {answer_line}")
+                    print(f"Unfortunately, that is not the right answer. The right answer was {answer_point}")
                     incorrect_answers += 1
                     answer = "incorrect 😔. Keep Working On It!"
                     break
@@ -122,17 +151,17 @@ while questions_answered < number_of_questions:
                 print("Please enter a valid integer as your answer")
                 print("If you wish to skip this question, enter 0 to move on. This way you may see the correct answer")
         # Game History
-        question = f"The Question was: If the angles around straight lines add up to 180 degrees, and you know one angle is {angle_one}, what is the value of the adjacent angle?"
+        question = f"The Question was: If the angles around a point add up to 180 degrees, and you know one angle is {angle_one}, what is the value of the adjacent angle?"
         answer_input = f"and you answered: {user_answer}"
         answer_correct_or_incorrect = f"This was {answer}"
         # Defines the variable to only be used if the user was incorrect - left blank if they were correct
         actual_answer = f""
         if answer == "incorrect 😔. Keep Working On It!":
             correct_answer_needed = "true"
-            actual_answer = f"The Correct answer was: {answer_line}"
+            actual_answer = f"The Correct answer was: {answer_point}"
         history_item = f"Question {question_number} - {question}, {answer_input}. {answer_correct_or_incorrect}. {actual_answer}"
         quiz_history.append(history_item)
-    if type_of_question == "square":
+    if type_of_question == "quadrilateral":
         angle_one = random.randint(1, 90)
         angle_two = random.randint(1, 90)
         angle_three = random.randint(1, 90)
@@ -140,16 +169,15 @@ while questions_answered < number_of_questions:
             try:
                 user_answer = int(input(f'You have a quadrilateral sitting in front of you. You know three of the angles: {angle_one}, {angle_two}, {angle_three}, \t'
                                         f'and also that all four angles should add up to 360 degrees total. What is the value of the missing angle? '))
-                answer_square = 360 - angle_one - angle_two - angle_three
-                if user_answer == answer_square:
-                    print("Congratulations! You answered correctly")
+                # Square - 360 - 3 random ints = answer
+                answer_quad = 360 - angle_one - angle_two - angle_three
+                if user_answer == answer_quad:
+                    print(f"Congratulations, {user_name}! You answered correctly")
                     correct_answers += 1
                     answer = "correct 👍. Great Job!"
                     break
-                elif user_answer == "xxx":
-                    break
                 else:
-                    print(f"Unfortunately, that is not the right answer. The right answer was {answer_square}")
+                    print(f"Unfortunately, that is not the right answer. The right answer was {answer_quad}")
                     incorrect_answers += 1
                     answer = "incorrect 😔. Keep Working On It!"
                     break
@@ -157,21 +185,22 @@ while questions_answered < number_of_questions:
                 print("Please enter a valid integer as your answer")
                 print("If you wish to skip this question, enter 0 to move on. This way you may see the correct answer")
         # Game History
-        question = f"The Question was: If the angles around straight lines add up to 180 degrees, and you know one angle is {angle_one}, what is the value of the adjacent angle?"
+        question_p1 = f'The Question was: You have a quadrilateral sitting in front of you. You know three of the angles: {angle_one}, {angle_two}, {angle_three},'
+        question_p2 = f'and also that all four angles should add up to 360 degrees total. What is the value of the missing angle?'
         answer_input = f"and you answered: {user_answer}"
         answer_correct_or_incorrect = f"This was {answer}"
         # Defines the variable to only be used if the user was incorrect - left blank if they were correct
         actual_answer = f""
         if answer == "incorrect 😔. Keep Working On It!":
             correct_answer_needed = "true"
-            actual_answer = f"The Correct answer was: {answer_square}"
-        history_item = f"Question {question_number} - {question}, {answer_input}. {answer_correct_or_incorrect} {actual_answer}"
+            actual_answer = f"The Correct answer was: {answer_quad}"
+        history_item = f"Question {question_number} - {question_p1} {question_p2}, {answer_input}. {answer_correct_or_incorrect} {actual_answer}"
         quiz_history.append(history_item)
     question_number += 1
     questions_answered += 1
 # Only displays statistics and asks if you would like to see game history if you answer at least one question
 if questions_answered > 0:
-    # Tabulating Statistics
+    # Tabulating Statistics as percentages for results summary
     percent_correct = correct_answers / questions_answered * 100
     percent_incorrect = incorrect_answers / questions_answered * 100
 
@@ -180,7 +209,9 @@ if questions_answered > 0:
     print(f"👍 Correct Answers: {percent_correct:.2f} \t"
           f"😔 Incorrect Answers: {percent_incorrect:.2f}")
     if percent_incorrect > 50:
-      print("You might need a new angle to go about these questions with!")
+      print(f"You might need a new angle to go about these questions with, {user_name}!")
+    else:
+        print(f"Excellent Job, {user_name}! When it comes to angles, you seem to be acute-ly aware.")
     # Game History
     see_history = string_checker("Do you want to see your game history? ")
     if see_history == "yes":
@@ -189,13 +220,7 @@ if questions_answered > 0:
         print(item)
     print()
     print("thanks for playing.")
+# otherwise, roast
 else:
-    print("Sorry, it seems you've been obtuse, and ended before answering any questions!")
-    # Collect game history? - Think I have to do it in each question type
-# Triangle - 180 - random int - random int = answer
-# Straight line 180 - random int = answer
-# Square - 360 - 3 random ints = answer
+    print(f"Sorry, {user_name}, it seems you've been obtuse, and ended before answering any questions!")
 
-# Display question, ask for answer, check if the answer is correct or not - add this to the quiz results
-
-# Create percentages for results summary

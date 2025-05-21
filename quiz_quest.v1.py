@@ -64,6 +64,14 @@ And to only type your answer without a unit!
 Good luck, and if you get stuck, don't be afraid to look at the question from a different angle 😉
     """)
 
+def history():
+    """ Appends values to the game history so that the code may be more concise """
+    answer_input = f"and you answered: {user_answer}"
+    answer_correct_or_incorrect = f"This was {answer}"
+    # Defines the variable to only be used if the user was incorrect - left blank if they were correct
+    history_item = f"Question {question_number} - {question}, {answer_input}. {answer_correct_or_incorrect}. {actual_answer}"
+    quiz_history.append(history_item)
+
 # Initialise Variables
 question_types = ["triangle", "point", "quadrilateral", "xxx"]
 questions_answered = 0
@@ -73,9 +81,10 @@ question_number = 1
 quiz_history = []
 user_answer = ""
 
+# Begin Main Program
 # Welcome statement, check if they would like to see the instructions
 print("Welcome to Quiz Quest - 📐 Angles Edition! 📐")
-# Asks the user for their name in order to personalise the program
+# Asks the user for their name in order to personalise the program later on
 user_name = input("Please enter your name to proceed: ")
 wants_instructions = string_checker(f"{user_name}, would you like to see the instructions before you begin? ")
 if wants_instructions == "yes":
@@ -98,7 +107,7 @@ while questions_answered < number_of_questions:
     if type_of_question == "xxx":
         break
     if type_of_question == "triangle":
-        # Defines the angles in the question so they do not get changed if the value error is triggered and the code runs again
+        # Defines the angles in the question so they do not get changed if the value error and loop are triggered
         angle_one = random.randint(1, 90)
         angle_two = random.randint(1, 90)
         while True:
@@ -122,15 +131,12 @@ while questions_answered < number_of_questions:
                 print("If you wish to skip this question, enter 0 to move on. This way you may see the correct answer")
         # Game History
         question = f"The Question was: If a triangles internal angles add up to 180 degrees, and the first to degrees are {angle_one} and {angle_two}, what is the value of the third angle?"
-        answer_input = f"and you answered: {user_answer}"
-        answer_correct_or_incorrect = f"This was {answer}"
-        # Defines the variable to only be used if the user was incorrect - left blank if they were correct
-        actual_answer = f""
         if answer == "incorrect 😔. Keep Working On It!":
             actual_answer = f"The Correct answer was: {answer_triangle}"
-        history_item = f"Question {question_number} - {question}, {answer_input}. {answer_correct_or_incorrect}. {actual_answer}"
-        quiz_history.append(history_item)
-    if type_of_question == "point":
+        else:
+            actual_answer = f""
+        history()
+    elif type_of_question == "point":
         angle_one = random.randint(1, 175)
         while True:
             try:
@@ -152,16 +158,12 @@ while questions_answered < number_of_questions:
                 print("If you wish to skip this question, enter 0 to move on. This way you may see the correct answer")
         # Game History
         question = f"The Question was: If the angles around a point add up to 180 degrees, and you know one angle is {angle_one}, what is the value of the adjacent angle?"
-        answer_input = f"and you answered: {user_answer}"
-        answer_correct_or_incorrect = f"This was {answer}"
-        # Defines the variable to only be used if the user was incorrect - left blank if they were correct
-        actual_answer = f""
         if answer == "incorrect 😔. Keep Working On It!":
-            correct_answer_needed = "true"
             actual_answer = f"The Correct answer was: {answer_point}"
-        history_item = f"Question {question_number} - {question}, {answer_input}. {answer_correct_or_incorrect}. {actual_answer}"
-        quiz_history.append(history_item)
-    if type_of_question == "quadrilateral":
+        else:
+            actual_answer = f""
+        history()
+    elif type_of_question == "quadrilateral":
         angle_one = random.randint(1, 90)
         angle_two = random.randint(1, 90)
         angle_three = random.randint(1, 90)
@@ -187,18 +189,16 @@ while questions_answered < number_of_questions:
         # Game History
         question_p1 = f'The Question was: You have a quadrilateral sitting in front of you. You know three of the angles: {angle_one}, {angle_two}, {angle_three},'
         question_p2 = f'and also that all four angles should add up to 360 degrees total. What is the value of the missing angle?'
-        answer_input = f"and you answered: {user_answer}"
-        answer_correct_or_incorrect = f"This was {answer}"
-        # Defines the variable to only be used if the user was incorrect - left blank if they were correct
-        actual_answer = f""
         if answer == "incorrect 😔. Keep Working On It!":
-            correct_answer_needed = "true"
             actual_answer = f"The Correct answer was: {answer_quad}"
-        history_item = f"Question {question_number} - {question_p1} {question_p2}, {answer_input}. {answer_correct_or_incorrect} {actual_answer}"
-        quiz_history.append(history_item)
+        else:
+            actual_answer = f""
+        history()
     question_number += 1
     questions_answered += 1
-# Only displays statistics and asks if you would like to see game history if you answer at least one question
+
+# Game Statistics and History Area
+# Only displays statistics if you have answered at least one question
 if questions_answered > 0:
     # Tabulating Statistics as percentages for results summary
     percent_correct = correct_answers / questions_answered * 100
